@@ -63,11 +63,33 @@ class Model:
 
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_distributore, costo_corrente, prezzi_settimana):
         """ Implementa la ricorsione """
-        # TODO
+
+
+
+
+
+
+
+
 
     def __get_prezzi_prima_settimana_mese(self, mese: int):
         """
         Restituisce i prezzi dei primi 7 giorni del mese selezionato per ciascun distributore.
         :return: un dizionario: {id_distributore: [prezzo_giorno1, ..., prezzo_giorno7]}
         """
-        # TODO
+        prezzi_settimana = dict()
+        for distributore in self._distributori:
+            prezzi = distributore.get_prezzi()
+
+        if prezzi is None:
+            raise RuntimeError("Prezzi non trovati")
+
+        prezzi_giornalieri = [None, None, None, None, None, None, None]
+
+        for prezzo in prezzi:
+            if prezzo.data.month == mese and 1 <= prezzo.data.day <= 7:
+                prezzi_giornalieri[prezzo.data.day - 1] = prezzo.prezzo_litro
+
+            prezzi_settimana[distributore.id] = prezzi_giornalieri
+
+        return prezzi_settimana
