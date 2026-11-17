@@ -64,8 +64,35 @@ class Model:
     def __ricorsione(self, sequenza_parziale, giorno, ultimo_distributore, costo_corrente, prezzi_settimana):
         """ Implementa la ricorsione """
 
+        if giorno == 8:
+            if self.__costo_ottimo == -1 or costo_corrente < self.__costo_ottimo:
+                self.__costo_ottimo = costo_corrente
+                self.__sequenza_ottima = sequenza_parziale.copy()
+            return
 
+        # Esplora i distributori disponibili
+        for id_distributore, prezzi in prezzi_settimana.items():
 
+            costo_giorno = prezzi[giorno - 1] * 100
+
+            if ultimo_distributore is not None and ultimo_distributore != id_distributore:
+                costo_giorno += 5
+
+            nuovo_costo = costo_corrente + costo_giorno
+
+            # Potatura dei rami non convenienti
+            if self.__costo_ottimo == -1 or nuovo_costo < self.__costo_ottimo:
+                sequenza_parziale.append(id_distributore)
+
+                self.__ricorsione(
+                    sequenza_parziale,
+                    giorno + 1,
+                    id_distributore,
+                    nuovo_costo,
+                    prezzi_settimana
+                )
+
+                sequenza_parziale.pop()
 
 
 
